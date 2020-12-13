@@ -30,3 +30,35 @@
 
 
 // On button click, prepare and display infographic
+
+document.getElementById("btn").onclick = function() {changeContent()};
+
+function changeContent() {
+  document.getElementById("dino-compare").classList.toggle("remove");
+
+  grid = document.getElementById("grid");
+
+  function createTileItem() {
+    let tile = document.createElement("div"); 
+
+    let content = document.createElement("p");
+    content.textContent = "Test";
+
+    tile.appendChild(content);
+    tile.classList.add("grid-item");
+
+    return tile;
+  }
+
+  var i = 0;
+  while (i < 9) {
+    console.log("Hallo")
+    grid.appendChild(createTileItem());
+    console.log(grid);
+    i++;
+  }
+
+}
+
+
+

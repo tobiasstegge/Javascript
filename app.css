@@ -1,3 +1,9 @@
+/* Utilities */
+
+.remove {
+    display: none;
+}
+
 /* General Styles */
 body {
     background: rgb(111, 208, 224);
