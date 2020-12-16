@@ -1,4 +1,3 @@
-
 // Create Dino Class
 class Dino {
   constructor(species, weight, height, diet, where, when, fact) {
@@ -9,40 +8,50 @@ class Dino {
   this.where = where;
   this.when = when;
   this.fact = fact;
+  this.factDisplayed = undefined;
   }
 
-  generateFact(human) {
-    // select random fact
-    var randomNumber = Math.floor(Math.random() * 3);
-    console.log("random Number: " + randomNumber)
-    switch(randomNumber) {
-      case 0: {
-        if (this.weight > human.weight) {
-          return `This Dino is heavier than you`
-        }
-        else {
-          return `This Dino is ligther than you`
-        }
+// select random fact
+generateFact(human) {
+  var randomNumber = Math.floor(Math.random() * 6);
+  console.log("random Number: " + randomNumber)
+  switch(randomNumber) {
+  case 0:
+      if (this.weight > human.weight) {
+        this.factDisplayed = `This Dino is heavier than you`
       }
-      case 1: {
-        if (this.height > human.feet) {
-          return `This Dino is ${this.height - human.feet} feet smaller than you`;
-        }
-        else {
-          return `his Dino is ${human.feet - this.height} feet smaller than you`;
-        }
+      else {
+        this.factDisplayed = `This Dino is ligther than you`
       }
-      case 2: {
-        if (this.weight > human.weight) {
-          return "This Dino is heavier than you";
-        }
-        else {
-          return "This Dino is lighter than you";
-        }
+    break;
+  case 1: 
+      if (this.height > human.feet) {
+        this.factDisplayed = `This Dino is ${this.height - human.feet} feet smaller than you`;
       }
+      else {
+        this.factDisplayed = `his Dino is ${human.feet - this.height} feet smaller than you`;
+      }
+      break;
+  case 2: 
+      if (this.weight > human.weight) {
+        this.factDisplayed = "This Dino is heavier than you";
+      }
+      else {
+        this.factDisplayed = "This Dino is lighter than you";
+      }
+      break;
+  case 3: 
+      this.factDisplayed = `The species of this dinosaur is ${this.species}!`;
+      break;
+  case 4: 
+    this.factDisplayed = `This dinausaur was living in the ${this.when}!`;
+      break;
+  case 5: 
+    this.factDisplayed = this.fact;
+      break;
     }
   }
-} 
+}
 
 // Create Human Class
 class Human {
@@ -54,6 +63,23 @@ class Human {
   this.diet = diet,
   this.image = image;
   }
+}
+
+// sourced from http://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
+function shuffle(array) {
+  var currentIndex = array.length, temporaryValue, randomIndex;
+
+  while (0 !== currentIndex) {
+
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex -= 1;
+
+    temporaryValue = array[currentIndex];
+    array[currentIndex] = array[randomIndex];
+    array[randomIndex] = temporaryValue;
+  }
+
+  return array;
 }
 
 // Get Dino Data From JSON
@@ -79,70 +105,53 @@ const getHumanData = (function () {
   return new Human(name, feet, inches, weight, diet, image);
 })
 
-
-    // Use IIFE to get human data from form
-
-
-    // Create Dino Compare Method 1
-    // NOTE: Weight in JSON file is in lbs, height in inches. 
-
-    
-    // Create Dino Compare Method 2
-    // NOTE: Weight in JSON file is in lbs, height in inches.
-
-    
-    // Create Dino Compare Method 3
-    // NOTE: Weight in JSON file is in lbs, height in inches.
-
-
-    // Generate Tiles for each Dino in Array
-  
-        // Add tiles to DOM
-
-    // Remove form from screen
-
-
 // Prepare and display infographic on button click
-document.getElementById("btn").onclick = function() {
+document.getElementById("btn").onclick = async function() {
   human = getHumanData();
-  console.log(human);
+  dinos = await getDinoData();
 
-  getDinoData().then((dinos) => {
-    console.log(dinos.length)
-    dinos.forEach(dino => {
-      console.log(dino.generateFact(human))
-    });
-  })
+  dinos.forEach(dino => dino.generateFact(human))
+  console.log(dinos);
+  tiles = shuffle(dinos);
+  tiles.splice(4, 0, human); // add human tile in the middle
+  changeContent(tiles) // update view
+  }
 
-  changeContent()
-
-};
-
-function changeContent() {
+// edit DOM
+function changeContent(tiles) {
   document.getElementById("dino-compare").classList.toggle("remove");
 
   grid = document.getElementById("grid");
 
-  function createTileItem() {
-    let tile = document.createElement("div"); 
+  function createTileItem(tile) {
+    let div = document.createElement('div');
+    div.classList = "grid-item";
+    
+    let imagePath;
+    let species;
+    let factDisplayed;
 
-    let content = document.createElement("p");
-    content.textContent = "Test";
+    if (tile.species !== undefined) {
+      imagePath = "./images/" + String(tile.species).toLowerCase() + ".png";
+      species = tile.species;
+      factDisplayed = tile.factDisplayed;
+    }
+    else {
+      species = tile.name;
+      imagePath = tile.image;
+      factDisplayed = ""; 
+    }
 
-    tile.appendChild(content);
-    tile.classList.add("grid-item");
+    div.innerHTML = `
+    <h3>${species}</h3>
+    <img src="${imagePath}">
+    <p>${factDisplayed}</p> `;
 
-    return tile;
+    return div;
   }
 
-  var i = 0;
-  while (i < 9) {
-    grid.appendChild(createTileItem());
-    console.log(grid);
-    i++;
-  }
-
+  tiles.forEach(tile => {
+    grid.appendChild(createTileItem(tile));
+  }) 
 }
-
-
 
