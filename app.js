@@ -1,5 +1,5 @@
 
-// Create Dino Constructor
+// Create Dino Class
 class Dino {
   constructor(species, weight, height, diet, where, when, fact) {
   this.species = species;
@@ -10,9 +10,41 @@ class Dino {
   this.when = when;
   this.fact = fact;
   }
+
+  generateFact(human) {
+    // select random fact
+    var randomNumber = Math.floor(Math.random() * 3);
+    console.log("random Number: " + randomNumber)
+    switch(randomNumber) {
+      case 0: {
+        if (this.weight > human.weight) {
+          return `This Dino is heavier than you`
+        }
+        else {
+          return `This Dino is ligther than you`
+        }
+      }
+      case 1: {
+        if (this.height > human.feet) {
+          return `This Dino is ${this.height - human.feet} feet smaller than you`;
+        }
+        else {
+          return `his Dino is ${human.feet - this.height} feet smaller than you`;
+        }
+      }
+      case 2: {
+        if (this.weight > human.weight) {
+          return "This Dino is heavier than you";
+        }
+        else {
+          return "This Dino is lighter than you";
+        }
+      }
+    }
+  }
 } 
 
-// Create Human Constructor
+// Create Human Class
 class Human {
   constructor(name, feet, inches, weight, diet, image) {
   this.name = name, 
@@ -48,8 +80,6 @@ const getHumanData = (function () {
 })
 
 
-      // Create Human Object
-
     // Use IIFE to get human data from form
 
 
@@ -79,9 +109,10 @@ document.getElementById("btn").onclick = function() {
 
   getDinoData().then((dinos) => {
     console.log(dinos.length)
+    dinos.forEach(dino => {
+      console.log(dino.generateFact(human))
+    });
   })
-
-
 
   changeContent()
 
