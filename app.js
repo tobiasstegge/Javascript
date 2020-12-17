@@ -40,7 +40,7 @@ compareDiet(human) {
 
 // select random fact
 generateFact(human) {
-  let randomNumber = Math.floor(Math.random() * 6);
+  const randomNumber = Math.floor(Math.random() * 6);
   switch(randomNumber) {
   case 0:
     this.compareWeight(human);
@@ -106,12 +106,12 @@ const getDinoData = (e) => {
 
 // Create Human Object
 const getHumanData = (function () {
-  let name = document.getElementById("name").value; 
-  let feet = document.getElementById("feet").value; 
-  let inches = document.getElementById("inches").value; 
-  let weight = document.getElementById("weight").value; 
-  let diet = document.getElementById("diet").value;
-  let image = "images/human.png";
+  const name = document.getElementById("name").value; 
+  const feet = document.getElementById("feet").value; 
+  const inches = document.getElementById("inches").value; 
+  const weight = document.getElementById("weight").value; 
+  const diet = document.getElementById("diet").value;
+  const image = "images/human.png";
 
   return new Human(name, feet, inches, weight, diet, image);
 })
@@ -142,7 +142,7 @@ function changeContent(tiles) {
   grid = document.getElementById("grid");
 
   function createTileItem(tile) {
-    let div = document.createElement('div');
+    const div = document.createElement('div');
     div.classList = "grid-item";
     
     let imagePath;
