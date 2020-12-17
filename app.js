@@ -11,34 +11,45 @@ class Dino {
   this.factDisplayed = undefined;
   }
 
+compareHeight(human) {
+  if (this.height > human.feet) {
+    this.factDisplayed = `This Dino is ${this.height - human.feet} feet smaller than you`;
+  }
+  else {
+    this.factDisplayed = `his Dino is ${human.feet - this.height} feet smaller than you`;
+  }
+}
+
+compareWeight(human) {
+  if (this.weight > human.weight) {
+    this.factDisplayed = `This Dino is heavier than you`
+  }
+  else {
+    this.factDisplayed = `This Dino is ligther than you`
+  }
+}
+
+compareDiet(human) {
+  if (this.diet === human.diet) {
+    this.factDisplayed = `This Dino is eating just like you`
+  }
+  else {
+    this.factDisplayed = `This Dino is not eating like you`
+  }
+}
+
 // select random fact
 generateFact(human) {
-  var randomNumber = Math.floor(Math.random() * 6);
-  console.log("random Number: " + randomNumber)
+  let randomNumber = Math.floor(Math.random() * 6);
   switch(randomNumber) {
   case 0:
-      if (this.weight > human.weight) {
-        this.factDisplayed = `This Dino is heavier than you`
-      }
-      else {
-        this.factDisplayed = `This Dino is ligther than you`
-      }
+    this.compareWeight(human);
     break;
   case 1: 
-      if (this.height > human.feet) {
-        this.factDisplayed = `This Dino is ${this.height - human.feet} feet smaller than you`;
-      }
-      else {
-        this.factDisplayed = `his Dino is ${human.feet - this.height} feet smaller than you`;
-      }
+    this.compareDiet(human);
       break;
   case 2: 
-      if (this.weight > human.weight) {
-        this.factDisplayed = "This Dino is heavier than you";
-      }
-      else {
-        this.factDisplayed = "This Dino is lighter than you";
-      }
+    this.compareHeight(human);
       break;
   case 3: 
       this.factDisplayed = `The species of this dinosaur is ${this.species}!`;
@@ -67,7 +78,7 @@ class Human {
 
 // sourced from http://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
 function shuffle(array) {
-  var currentIndex = array.length, temporaryValue, randomIndex;
+  let currentIndex = array.length, temporaryValue, randomIndex;
 
   while (0 !== currentIndex) {
 
@@ -110,8 +121,15 @@ document.getElementById("btn").onclick = async function() {
   human = getHumanData();
   dinos = await getDinoData();
 
-  dinos.forEach(dino => dino.generateFact(human))
-  console.log(dinos);
+  dinos.forEach(dino => {
+    if (dino.species !== 'Pigeon') {
+      dino.generateFact(human)
+    }
+    else {
+      dino.factDisplayed = dino.fact;
+    }
+  })
+
   tiles = shuffle(dinos);
   tiles.splice(4, 0, human); // add human tile in the middle
   changeContent(tiles) // update view
