@@ -59,7 +59,7 @@ class Dino {
       case 4:
         this.factDisplayed = `This dinausaur was living in the ${this.when}!`;
         break;
-      case 5:
+      default:
         this.factDisplayed = this.fact;
         break;
     }
